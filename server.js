@@ -70,7 +70,7 @@ io.on('connection', function(client) {
           content: data.content
         });
       });
-     socket.on('disconnect', function() {
+     client.on('disconnect', function() {
       console.log('Got disconnect!');
 
       clients--;
