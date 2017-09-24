@@ -12,10 +12,10 @@ class App extends Component {
     constructor(props) {
         super(props);
         const hexGen = function () {
-            const hexVals = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
+            const hexVals = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e']
             const newHex = ['#']
             for (var x = 1; x <= 6; x++) {
-                newHex.push(hexVals[Math.floor(Math.random() * 15)].toString())
+                newHex.push(hexVals[Math.floor(Math.random() * 14)].toString())
             }
             return newHex.join('');
         }
@@ -26,7 +26,6 @@ class App extends Component {
             },
             online: 0,
             messages: [], // messages coming from the server will be stored here as they arrive
-            notification: ''
         };
     }
 
@@ -35,24 +34,29 @@ class App extends Component {
 
         socket.on('connect', function () {
             socket.emit('join', 'hello world from the client!');
-        });
+        }.bind(this));
         socket.on('broad', function (event) {
-            console.log(event)
-            var data = event
-            if (data.type === 'incomingMessage') {
-                this.setState({
-                    messages: data.messages
-                });
-            } else if (data.type === 'incomingNotification') {
-                this.setState({
-                    notification: data.content
-                });
-            } else if (data.type === 'usersOnline') {
-                this.setState({
-                    online: data.online,
-                });
-            }
-        }.bind(this))
+            this.setState({
+                messages: event.messages
+            });
+        }.bind(this));
+         socket.on('notification', function (event) {
+            this.setState({
+                messages: event.messages
+                
+            });
+        }.bind(this));
+        socket.on('online', function (event) {
+            this.setState({
+                online: event.online
+            });
+        }.bind(this));
+         socket.on('roll', function (event) {
+            this.setState({
+                messages: event.messages
+            });
+        }.bind(this));
+                
     }
     addMessage(content) {
         var username = this.state.currentUser.name;
@@ -64,15 +68,17 @@ class App extends Component {
         });
     }
     changeUser(content) {
-        this.setState({
+         socket.emit('notification', {
+            username: this.state.currentUser.name,
+            name: content.newUser,
+        });
+          this.setState({
             currentUser: {
                 name: content.newUser,
                 color: this.state.currentUser.color
-            }
-        });
-        socket.emit('notification', {
-            content: content.oldUser + ' has changed their name to ' + content.newUser
-        });
+            }     
+         });
+
     }
     render() {
         return ( <div>
@@ -80,8 +86,7 @@ class App extends Component {
                 <a href = "/" className = "navbar-brand" > Hedron </a> 
                 <p className = 'pull-right'> {this.state.online} user(s) online </p> 
             </nav>
-            <MessageList messages = {this.state.messages}
-            notification = {this.state.notification}/> 
+            <MessageList messages = {this.state.messages}/> 
             <ChatBar currentUser = {this.state.currentUser.name} addMessage = {this.addMessage.bind(this)}
             changeUser = {this.changeUser.bind(this)}/> 
             </div>

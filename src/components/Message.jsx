@@ -15,7 +15,7 @@ class Message extends Component {
             };
             return <div className = "message" key = {i} >
                 <span key = {i} style = {fontCol} className = "message-username" > 
-                   { message.username}
+                   { message.username || 'Notification'}
                 </span> 
                 <span className = "message-content" > 
                    < div dangerouslySetInnerHTML = {

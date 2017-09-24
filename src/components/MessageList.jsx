@@ -4,7 +4,7 @@ import Message from './Message.jsx';
 let MessageList = (props) =>
 
     <main className = "messages" >
-    <Message messages = {props.messages}/> <div className = "message system" > {props.notification} < /div> 
+    <Message messages = {props.messages}/>
     </main>
 
 MessageList.propTypes = {

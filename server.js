@@ -28,7 +28,6 @@ const messages = [];
 let clients = 0;
 
 const messageObj = {
-  type: 'incomingMessage',
   messages: messages
 }
 
@@ -43,22 +42,35 @@ io.usersOnline = function(client){
 
 
 io.on('connection', function(client) {
+  //when user connects
     
-      
   console.log('client connected!');
   client.emit(JSON.stringify(messageObj));
   clients++;
-  client.emit('broad',{
+  client.emit('online',{
       type: 'usersOnline',
       online: clients
     });
-  client.broadcast.emit('broad',{
+  client.broadcast.emit('online',{
       type: 'usersOnline',
       online: clients
     });
     client.emit('broad',messageObj)
   client.broadcast.emit('broad',messageObj);
+    
+  //when someone writes a message
   client.on('message',(data) => {
+  //when user rolls dice
+    if(/^::roll/.test(data.content)){
+       var number = parseInt(data.content.replace('::roll','').replace(/[\D]/,''));
+       messages.push({
+         content: '<div class="dice">' + 
+           data.username + ' has rolled ' + (Math.floor(Math.random() * number)+1) + '</div>',
+       });
+        
+       client.emit('roll',messageObj);
+       client.broadcast.emit('roll',messageObj);
+    }else{
         messages.push({
           id: uuid(),
           username: data.username,
@@ -67,21 +79,24 @@ io.on('connection', function(client) {
         });
         client.emit('broad',messageObj);
         client.broadcast.emit('broad',messageObj);
+      }
   });
+    
+  //when a user is changed
   client.on('notification',(data) => {
-        client.broadcast.emit('broad',{
-          type:'incomingNotification',
-          content: data.content
+       messages.push({
+          content: '<i>' + data.username + ' has changed their name to ' + data.name + '</i>',
         });
-       client.emit('broad',{
-         type:'incomingNotification',
-          content: data.content
-       });
+        client.broadcast.emit('notification',messageObj)
+       
+       client.emit('notification',messageObj)
+       
       });
+   
+    //when user leaves
      client.on('disconnect', function() {
       console.log('Got disconnect!');
-
-      clients--;
+       clients--;
        client.broadcast.emit('broad',{
        type: 'usersOnline',
        online: clients
