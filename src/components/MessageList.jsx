@@ -5,6 +5,7 @@ let MessageList = (props) =>
 
     <main className = "messages" >
     <Message messages = {props.messages}/>
+    <div id='messagesEnd'></div>
     </main>
 
 MessageList.propTypes = {

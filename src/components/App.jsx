@@ -1,6 +1,9 @@
 import React, {
     Component
 } from 'react';
+
+import ReactDOM from 'react-dom';
+
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import io from 'socket.io-client';
@@ -34,11 +37,17 @@ class App extends Component {
 
         socket.on('connect', function () {
             socket.emit('join', 'hello world from the client!');
+             var element = document.getElementById("messagesEnd");
+            element.scrollIntoView({ behavior: "smooth" });
         }.bind(this));
         socket.on('broad', function (event) {
             this.setState({
                 messages: event.messages
             });
+            var element = document.getElementById("messagesEnd");
+
+            element.scrollIntoView({ behavior: "smooth" });
+            
         }.bind(this));
          socket.on('notification', function (event) {
             this.setState({
