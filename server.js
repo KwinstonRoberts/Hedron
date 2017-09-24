@@ -63,7 +63,7 @@ io.on('connection', function(client) {
         });
         client.emit('broad',messageObj);
         client.broadcast.emit('broad',messageObj);
-   
+  });
   client.on('notification',(data) => {
         client.broadcast.emit('broad',{
           type:'incomingNotification',
@@ -75,7 +75,6 @@ io.on('connection', function(client) {
   client.on('join', function(data) {
     console.log(data);
   });
-});
 
 server.listen(PORT, function(error) {
   if (error) {

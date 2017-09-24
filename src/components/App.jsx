@@ -69,7 +69,6 @@ class App extends Component {
       }
     });
       socket.emit('notification', {
-        type: 'notification',
         content: content.oldUser + ' has changed their name to ' + content.newUser
       });
   }
