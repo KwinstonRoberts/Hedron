@@ -3,16 +3,17 @@ var path = require('path');
 
 module.exports = {
   entry: [
-    './src/index'
+    './src/index.jsx'
   ],
   module: {
+   
     loaders: [
-      { test: /\.js?$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
       { test: /\.s?css$/, loader: 'style!css!sass' },
     ]
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js','jsx']
   },
   output: {
     path: path.join(__dirname, '/dist'),
@@ -29,3 +30,5 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ]
 };
+
+
