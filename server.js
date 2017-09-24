@@ -70,11 +70,17 @@ io.on('connection', function(client) {
           content: data.content
         });
       });
+     socket.on('disconnect', function() {
+      console.log('Got disconnect!');
+
+      clients--;
+       client.broadcast.emit('broad',{
+       type: 'usersOnline',
+       online: clients
+    });
+   });
   });
 
-  client.on('join', function(data) {
-    console.log(data);
-  });
 
 server.listen(PORT, function(error) {
   if (error) {
