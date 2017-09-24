@@ -22,14 +22,17 @@ class ChatBar extends Component {
             this.setState({
                 value: ''
             })
-            ReactDOM.findDOMNode(this.refs.form).value = "";
             this.props.addMessage(this.state.value);
-        } else {
-            this.setState({
-                value: event.target.value
-            });
+       
         }
     }
+    
+    onChange(event){
+        this.setState({
+            value: event.target.value
+        });
+    }
+    
     changeUser(event) {
         if (event.key === 'Enter') {
             var oldUser = this.props.currentUser;
@@ -49,8 +52,9 @@ class ChatBar extends Component {
             <input className = "chatbar-username" placeholder = {this.props.currentUser}
             onKeyUp = {this.changeUser}
             /> <input className = "chatbar-message" 
-            value={thius.state.value}
+            value={this.state.value}
             placeholder = "Type a message and hit ENTER"
+            onChange={this.onChange.bind(this)}
             onKeyUp = {this.addMessage.bind(this)}/> 
             </footer>
         );
