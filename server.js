@@ -43,6 +43,8 @@ io.usersOnline = function(client){
 
 
 io.on('connection', function(client) {
+    
+      
   console.log('client connected!');
   client.emit(JSON.stringify(messageObj));
   clients++;
@@ -54,6 +56,8 @@ io.on('connection', function(client) {
       type: 'usersOnline',
       online: clients
     });
+    client.emit('broad',messageObj)
+  client.broadcast.emit('broad',messageObj);
   client.on('message',(data) => {
         messages.push({
           id: uuid(),
