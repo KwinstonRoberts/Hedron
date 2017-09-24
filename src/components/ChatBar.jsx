@@ -2,6 +2,7 @@ import React, {
     Component
 } from 'react';
 
+import ReactDOM from 'react-dom'
 
 class ChatBar extends Component {
 
@@ -21,6 +22,7 @@ class ChatBar extends Component {
             this.setState({
                 value: ''
             })
+            ReactDOM.findDOMNode(this.refs.form).value = "";
             this.props.addMessage(this.state.value);
         } else {
             this.setState({
