@@ -13,28 +13,14 @@ class Message extends Component {
             const fontCol = {
                 color: this.props.messages[i].color
             };
-            return <div className = "message"
-            key = {
-                    i
-                } >
-                <
-                span key = {
-                    i
-                }
-            style = {
-                fontCol
-            }
-            className = "message-username" > {
-                    message.username
-                } < /span> <
-                span className = "message-content" > < div dangerouslySetInnerHTML = {
-                    {
-                        __html: message.content.replace(/((http){1}[s]?(:\/\/){1}[a-z0-9\/.-]+(.jpg|.jpeg|.png|.gif))/gi, '<br><img width=\'60%\' src="$1"/>')
-                    }
-                }
-            /></span >
-            <
-            /div>
+            return <div className = "message" key = {i} >
+                <span key = {i} style = {fontCol} className = "message-username" > 
+                   { message.username}
+                </span> 
+                <span className = "message-content" > 
+                   < div dangerouslySetInnerHTML = {
+                    {__html: message.content.replace(/((http){1}[s]?(:\/\/){1}[a-z0-9\/.-]+(.jpg|.jpeg|.png|.gif))/gi, '<br><img width=\'60%\' src="$1"/>')}}/></span>
+            </div>
         });
         return <div > {
             messageList

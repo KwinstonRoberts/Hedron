@@ -75,35 +75,16 @@ class App extends Component {
         });
     }
     render() {
-        return ( < div >
-            <
-            nav className = "navbar" >
-            <
-            a href = "/"
-            className = "navbar-brand" > Hedron < /a> <
-            p className = 'pull-right' > {
-                this.state.online
-            }
-            user(s) online < /p> < /
-            nav > <
-            MessageList messages = {
-                this.state.messages
-            }
-            notification = {
-                this.state.notification
-            }
-            /> <
-            ChatBar currentUser = {
-                this.state.currentUser.name
-            }
-            addMessage = {
-                this.addMessage.bind(this)
-            }
-            changeUser = {
-                this.changeUser.bind(this)
-            }
-            /> < /
-            div >
+        return ( <div>
+            <nav className = "navbar" >
+                <a href = "/" className = "navbar-brand" > Hedron </a> 
+                <p className = 'pull-right'> {this.state.online} user(s) online </p> 
+            </nav>
+            <MessageList messages = {this.state.messages}
+            notification = {this.state.notification}/> 
+            <ChatBar currentUser = {this.state.currentUser.name} addMessage = {this.addMessage.bind(this)}
+            changeUser = {this.changeUser.bind(this)}/> 
+            </div>
         );
     }
 }

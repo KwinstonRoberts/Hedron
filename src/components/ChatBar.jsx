@@ -44,24 +44,13 @@ class ChatBar extends Component {
     }
 
     render() {
-        return ( <
-            footer className = "chatbar" >
-            <
-            input className = "chatbar-username"
-            placeholder = {
-                this.props.currentUser
-            }
-            onKeyUp = {
-                this.changeUser
-            }
-            /> <
-            input className = "chatbar-message"
+        return ( <footer className = "chatbar" >
+            <input className = "chatbar-username" placeholder = {this.props.currentUser}
+            onKeyUp = {this.changeUser}
+            /> <input className = "chatbar-message"
             placeholder = "Type a message and hit ENTER"
-            onKeyUp = {
-                this.addMessage
-            }
-            /> < /
-            footer >
+            onKeyUp = {this.addMessage}/> 
+            </footer>
         );
     }
 }
