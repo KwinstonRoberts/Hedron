@@ -44,7 +44,7 @@ class ChatBar extends Component {
     return (
       <footer className="chatbar">
         <input className="chatbar-username" placeholder={this.props.currentUser} onKeyUp={this.changeUser} />
-        <input className="chatbar-message" value='' placeholder="Type a message and hit ENTER" onKeyUp={this.addMessage}/>
+        <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyUp={this.addMessage}/>
       </footer>
     );
   }
