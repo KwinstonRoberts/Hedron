@@ -3,7 +3,7 @@ import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import io from 'socket.io-client';
 
-const socket = io('https://localhost:8080');
+const socket = io();
 
 
 class App extends Component {
