@@ -70,8 +70,8 @@ io.on('connection', function(client) {
           content: data.content
         });
        client.emit('broad',{
-        type: 'usersOnline',
-        online: clients
+         type:'incomingNotification',
+          content: data.content
        });
       });
      client.on('disconnect', function() {
