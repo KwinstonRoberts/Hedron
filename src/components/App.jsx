@@ -75,8 +75,7 @@ class App extends Component {
         });
     }
     render() {
-        return ( <
-            div >
+        return ( < div >
             <
             nav className = "navbar" >
             <
@@ -85,8 +84,8 @@ class App extends Component {
             p className = 'pull-right' > {
                 this.state.online
             }
-            user(s) online < /p> <
-            /nav> <
+            user(s) online < /p> < /
+            nav > <
             MessageList messages = {
                 this.state.messages
             }
@@ -103,8 +102,8 @@ class App extends Component {
             changeUser = {
                 this.changeUser.bind(this)
             }
-            /> <
-            /div>
+            /> < /
+            div >
         );
     }
 }
