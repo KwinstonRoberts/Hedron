@@ -69,6 +69,10 @@ io.on('connection', function(client) {
           type:'incomingNotification',
           content: data.content
         });
+       client.emit('broad',{
+        type: 'usersOnline',
+        online: clients
+       });
       });
      client.on('disconnect', function() {
       console.log('Got disconnect!');
