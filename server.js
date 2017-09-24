@@ -55,7 +55,6 @@ io.on('connection', function(client) {
       online: clients
     });
   client.on('message',(data) => {
-      if(data.type==='message'){
         messages.push({
           id: uuid(),
           username: data.username,
@@ -64,12 +63,13 @@ io.on('connection', function(client) {
         });
         client.emit('broad',messageObj);
         client.broadcast.emit('broad',messageObj);
-      }else if(data.type==='notification'){
+   
+  client.on('notification',(data) => {
         client.broadcast.emit('broad',{
           type:'incomingNotification',
           content: data.content
+        });
       });
-      }
   });
 
   client.on('join', function(data) {
