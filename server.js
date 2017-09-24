@@ -62,10 +62,10 @@ io.on('connection', function(client) {
   client.on('message',(data) => {
   //when user rolls dice
     if(/^::roll/.test(data.content)){
-       var number = parseInt(data.content.replace('::roll','').replace(/[\D]/,''));
+       var number = parseInt(data.content.replace('::roll','').replace(/[\D]/,'')) || 20;
        messages.push({
          content: '<div class="dice">' + 
-           data.username + ' has rolled ' + (Math.floor(Math.random() * number)+1) + '</div>',
+           data.username + ' has rolled ' + (Math.floor(Math.random() * number)+1) + ' out of ' + number + '</div>',
        });
         
        client.emit('roll',messageObj);
