@@ -46,11 +46,11 @@ io.on('connection', function(client) {
   console.log('client connected!');
   client.emit(JSON.stringify(messageObj));
   clients++;
-  client.emit({
+  client.emit('broad',{
       type: 'usersOnline',
       online: clients
     });
-  client.broadcast.emit({
+  client.broadcast.emit('broad',{
       type: 'usersOnline',
       online: clients
     });
