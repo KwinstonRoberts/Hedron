@@ -21,7 +21,7 @@ class ChatBar extends Component {
             this.setState({
                 value: ''
             })
-            ReactDOM.findDOMNode(this.refs.form).value = "";
+            React.findDOMNode(this.refs.form).value = "";
             this.props.addMessage(this.state.value);
         } else {
             this.setState({
