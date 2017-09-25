@@ -54,6 +54,8 @@ class App extends Component {
                 messages: event.messages
                 
             });
+            var element = document.getElementById("messagesEnd");
+            element.scrollIntoView({ behavior: "smooth" });
         }.bind(this));
         socket.on('online', function (event) {
             this.setState({
@@ -64,6 +66,8 @@ class App extends Component {
             this.setState({
                 messages: event.messages
             });
+            var element = document.getElementById("messagesEnd");
+            element.scrollIntoView({ behavior: "smooth" });
         }.bind(this));
                 
     }
