@@ -19,7 +19,7 @@ class Message extends Component {
                 </span> 
                 <span className = "message-content" > 
                    < div dangerouslySetInnerHTML = {
-                    {__html: message.content.replace(/((http){1}[s]?(:\/\/){1}[a-z0-9\/.-]+(.jpg|.jpeg|.png|.gif))/gi, '<br><img width=\'60%\' src="$1"/>')}}/></span>
+                    {__html: message.content}}/></span>
             </div>
         });
         return <div > {

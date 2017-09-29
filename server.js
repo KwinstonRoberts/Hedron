@@ -5,6 +5,7 @@ var PORT = process.env.PORT || 8080;
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var uuid = require('uuid/v1');
+var serialize = require('serialize-javascript');
 // using webpack-dev-server and middleware in development environment
 if (process.env.NODE_ENV !== 'production') {
   var webpackDevMiddleware = require('webpack-dev-middleware');
@@ -45,7 +46,7 @@ io.on('connection', function(client) {
   //when user connects
     
   console.log('client connected!');
-  client.emit(JSON.stringify(messageObj));
+  client.emit(messageObj);
   clients++;
   client.emit('online',{
       type: 'usersOnline',
@@ -60,6 +61,7 @@ io.on('connection', function(client) {
     
   //when someone writes a message
   client.on('message',(data) => {
+     
   //when user rolls dice
     if(/^::roll/.test(data.content)){
        var number = parseInt(data.content.replace('::roll','').replace(/[\D]/,'')) || 20;
@@ -70,11 +72,20 @@ io.on('connection', function(client) {
         
        client.emit('roll',messageObj);
        client.broadcast.emit('roll',messageObj);
+    }else if(/((http){1}[s]?(:\/\/){1}[a-z0-9\/.-]+(.jpg|.jpeg|.png|.gif))/gi.test(data.content)){
+         messages.push({
+          id: uuid(),
+          username: data.username,
+          content: '<img src="' + data.content + '"/>',
+          color: data.color
+        });
+        client.emit('broad',messageObj);
+        client.broadcast.emit('broad',messageObj);
     }else{
         messages.push({
           id: uuid(),
           username: data.username,
-          content: data.content,
+          content:data.content.replace(/<[a-z]*>/gi,''),
           color: data.color
         });
         client.emit('broad',messageObj);
@@ -103,7 +114,6 @@ io.on('connection', function(client) {
     });
    });
   });
-
 
 server.listen(PORT, function(error) {
   if (error) {
