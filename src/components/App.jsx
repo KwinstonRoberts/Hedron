@@ -39,6 +39,20 @@ class App extends Component {
             socket.emit('join', 'hello world from the client!');
              var element = document.getElementById("messagesEnd");
             element.scrollIntoView({ behavior: "smooth" });
+            
+            var webrtc = new SimpleWebRTC({
+                // the id/element dom element that will hold "our" video
+                  localVideoEl: 'localAudio',
+                  // the id/element dom element that will hold remote videos
+                  remoteAudiosEl: 'remotesAudios',
+                  // immediately ask for camera access
+                  autoRequestMedia: true
+            });
+            webrtc.on('readyToCall', function () {
+            // you can name it anything
+            webrtc.joinRoom('dnd room');
+            });
+            
         }.bind(this));
         socket.on('broad', function (event) {
             this.setState({
