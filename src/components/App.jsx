@@ -63,19 +63,19 @@ class App extends Component {
             });
             
             var webrtc = new SimpleWebRTC({
-                  socketio: socket,
                   debug:true,
+                  connection:socket,
                   media: {video:false,audio:true},
                   autoRequestMedia: true,
-                  localvideo:{muted: true, autoplay:true}
+                  adjustPeerVolume:true,
+                  localvideo:{autoplay:true},
+                  detectSpeakingEvents:true
                 });
                                                                                      
-            console.log('mic ready');
-            webrtc.on('readytocall',function(stream){
-                webrtc.joinRoom("dnd room");
-                webrtc.startLocalVideo()
-            })
            
+            webrtc.on('connectionReady',function(){
+                    webrtc.joinRoom('dnd_room');
+                });
         }.bind(this));
          socket.on('roll', function (event) {
             this.setState({

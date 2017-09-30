@@ -4,6 +4,7 @@ var app = express();
 var PORT = process.env.PORT || 8080;
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var rtc = require('simplewebrtc');
 var uuid = require('uuid/v1');
 
 // using webpack-dev-server and middleware in development environment
@@ -42,15 +43,18 @@ io.usersOnline = function(client){
 }
 
 
+
+
 io.on('connection', function(client) {
   //when user connects
     
   console.log('client connected!');
+
   client.emit(messageObj);
   clients++;
   client.emit('online',{
       type: 'usersOnline',
-      online: clients
+      online: io.engine.clientsCount
     });
   client.broadcast.emit('online',{
       type: 'usersOnline',
@@ -110,7 +114,7 @@ io.on('connection', function(client) {
        clients--;
        client.broadcast.emit('broad',{
        type: 'usersOnline',
-       online: clients
+       online: io.engine.clientsCount
     });
    });
   });
