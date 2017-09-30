@@ -5,8 +5,6 @@ var PORT = process.env.PORT || 8080;
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var uuid = require('uuid/v1');
-var signaler = require('conversationjs')
-var signaler = new Signaler();
 
 // using webpack-dev-server and middleware in development environment
 if (process.env.NODE_ENV !== 'production') {
