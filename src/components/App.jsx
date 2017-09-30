@@ -1,15 +1,19 @@
-import React, {
-    Component
-} from 'react';
-
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import io from 'socket.io-client';
 
 const socket = io();
 
+var webrtc = new SimpleWebRTC({
+  debug:true,
+  media: {video:false,audio:true},
+  autoRequestMedia: true,
+  adjustPeerVolume:true,
+  localvideo:{autoplay:true},
+  detectSpeakingEvents:true
+});
 
 class App extends Component {
     constructor(props) {
@@ -31,10 +35,8 @@ class App extends Component {
             messages: [], // messages coming from the server will be stored here as they arrive
         };
     }
-
     componentDidMount() {
         // Create the WebSockets server
-
         socket.on('connect', function () {
             socket.emit('join', 'hello world from the client!');
              var element = document.getElementById("messagesEnd");
@@ -49,10 +51,9 @@ class App extends Component {
             element.scrollIntoView({ behavior: "smooth" });
             
         }.bind(this));
-         socket.on('notification', function (event) {
+        socket.on('notification', function (event) {
             this.setState({
-                messages: event.messages
-                
+                messages: event.messages    
             });
             var element = document.getElementById("messagesEnd");
             element.scrollIntoView({ behavior: "smooth" });
@@ -61,21 +62,11 @@ class App extends Component {
             this.setState({
                 online: event.online
             });
-            
-            var webrtc = new SimpleWebRTC({
-                  debug:true,
-                  connection:socket,
-                  media: {video:false,audio:true},
-                  autoRequestMedia: true,
-                  adjustPeerVolume:true,
-                  localvideo:{autoplay:true},
-                  detectSpeakingEvents:true
-                });
+          
                                                                                      
-           
             webrtc.on('connectionReady',function(){
-                    webrtc.joinRoom('dnd_room');
-                });
+                webrtc.joinRoom('dnd_room');
+            });
         }.bind(this));
          socket.on('roll', function (event) {
             this.setState({
@@ -83,8 +74,7 @@ class App extends Component {
             });
             var element = document.getElementById("messagesEnd");
             element.scrollIntoView({ behavior: "smooth" });
-        }.bind(this));
-                
+        }.bind(this));                
     }
     addMessage(content) {
         var username = this.state.currentUser.name;
@@ -106,7 +96,6 @@ class App extends Component {
                 color: this.state.currentUser.color
             }     
          });
-
     }
     render() {
         return ( <div>
