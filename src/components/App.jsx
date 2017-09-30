@@ -10,9 +10,6 @@ var webrtc = new SimpleWebRTC({
   debug:true,
   media: {video:false,audio:true},
   autoRequestMedia: true,
-  adjustPeerVolume:true,
-  localvideo:{autoplay:true},
-  detectSpeakingEvents:true
 });
 
 class App extends Component {
@@ -64,7 +61,7 @@ class App extends Component {
             });
           
                                                                                      
-            webrtc.on('connectionReady',function(){
+            webrtc.on('readyToCall',function(){
                 webrtc.joinRoom('dnd_room');
             });
         }.bind(this));
