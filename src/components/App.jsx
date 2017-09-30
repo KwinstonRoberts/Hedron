@@ -67,7 +67,7 @@ class App extends Component {
                   debug:true,
                   media: {video:false,audio:true},
                   autoRequestMedia: true,
-                  muted: true
+                  localvideo:{muted: true, autoplay:true}
                 });
                                                                                      
             console.log('mic ready');
