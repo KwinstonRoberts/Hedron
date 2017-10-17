@@ -2,6 +2,16 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var PORT = process.env.PORT || 8080;
+var knex = require('knex')({
+  client: 'pg',
+  version: '7.2',
+  connection: {
+    host : '127.0.0.1',
+    user : 'development',
+    password : 'development',
+    database : 'vagrant'
+  }
+});
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var uuid = require('uuid/v1');
@@ -24,15 +34,9 @@ app.get('/', function(request, response) {
   response.sendFile(__dirname + '/dist/index.html')
 });
 
-
-const messages = [];
 let clients = 0;
 
-const messageObj = {
-  messages: messages
-}
-
-
+let messageObj = knex.select().from('messages')
 
 io.usersOnline = function(client){
   client.broadcast.emit({
@@ -41,12 +45,10 @@ io.usersOnline = function(client){
     });
 }
 
-
 io.on('connection', function(client) {
+
   //when user connects
-    
   console.log('client connected!');
-  client.emit(messageObj);
   clients++;
   client.emit('online',{
       type: 'usersOnline',
@@ -56,24 +58,22 @@ io.on('connection', function(client) {
       type: 'usersOnline',
       online: clients
     });
-    client.emit('broad',messageObj)
+
+  client.emit('broad',messageObj)
   client.broadcast.emit('broad',messageObj);
-    
+
   //when someone writes a message
   client.on('message',(data) => {
-     
+
   //when user rolls dice
     if(/^::roll/.test(data.content)){
        var number = parseInt(data.content.replace('::roll','').replace(/[\D]/,'')) || 20;
-       messages.push({
-         content: '<div class="dice">' + 
-           data.username + ' has rolled ' + (Math.floor(Math.random() * number)+1) + ' out of ' + number + '</div>',
-       });
-        
+       pg('messages').insert({body: '<div class="dice">' +
+       data.username + ' has rolled ' + (Math.floor(Math.random() * number)+1) + ' out of ' + number + '</div>'})
        client.emit('roll',messageObj);
        client.broadcast.emit('roll',messageObj);
     }else if(/((http){1}[s]?(:\/\/){1}[a-z0-9\/.-]+(.jpg|.jpeg|.png|.gif))/gi.test(data.content)){
-         messages.push({
+        pg('messages').insert({
           id: uuid(),
           username: data.username,
           content: '<img src="' + data.content + '"/>',
@@ -82,7 +82,7 @@ io.on('connection', function(client) {
         client.emit('broad',messageObj);
         client.broadcast.emit('broad',messageObj);
     }else{
-        messages.push({
+        pg('messages').insert({
           id: uuid(),
           username: data.username,
           content:data.content.replace(/<[a-z]*>/gi,''),
@@ -92,18 +92,16 @@ io.on('connection', function(client) {
         client.broadcast.emit('broad',messageObj);
       }
   });
-    
+
   //when a user is changed
   client.on('notification',(data) => {
-       messages.push({
+       pg('messages').insert({
           content: '<i>' + data.username + ' has changed their name to ' + data.name + '</i>',
         });
-        client.broadcast.emit('notification',messageObj)
-       
+       client.broadcast.emit('notification',messageObj)
        client.emit('notification',messageObj)
-       
       });
-   
+
     //when user leaves
      client.on('disconnect', function() {
       console.log('Got disconnect!');
@@ -122,8 +120,3 @@ server.listen(PORT, function(error) {
     console.info('==> Listening on port %s. Visit http://localhost:%s/ in your browser.', PORT, PORT);
   }
 });
-
-
-
-
-
